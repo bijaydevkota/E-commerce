@@ -18,7 +18,7 @@ const categories=[
     },
     {
         image: myImage,
-        name: "Biscuit 2",     
+        name: "Biscuit 1",     
     },
     {
         image: myImage,
@@ -71,10 +71,7 @@ export default function FeatureCategoriesSection() {
                     </div>
                   </SwiperSlide>
                 ))
-            }
-
-         
-         
+            } 
         </Swiper>
       </div>
     </div>
