@@ -12,9 +12,6 @@ import PopularProductsSection from "./components/popular-products";
 export default function App() {
   return (
     <div>     
-      <TopNavbar/>
-      <MidNavbar/>
-      <BottomNavbar/>
       <hr className="text-gray-300 mt-4"/>
       <HeroSectionSlider/>
       <FeatureCategoriesSection/>
