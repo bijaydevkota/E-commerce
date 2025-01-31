@@ -1,7 +1,8 @@
 import SingleProductCard from "./single-product-card";
+import myImage from "../../public/petcare.jpg"
 
 export default function PopularProductsSection() {
-  const myImage = "/petcare.jpg"; // Correct way to reference public assets in Next.js
+ 
 
   const products = [
     {

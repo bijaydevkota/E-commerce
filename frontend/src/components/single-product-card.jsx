@@ -1,4 +1,5 @@
 import React from "react";
+import ReactStars from "react-stars" 
 
 
 export default function SingleProductCard({eachItem}) {

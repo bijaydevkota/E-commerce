@@ -1,5 +1,6 @@
 import React from 'react';
 import SingleProductCard from '../components/single-product-card';
+import myImage from "../../public/petcare.jpg"
 
 const products = [
   {
@@ -99,13 +100,14 @@ export default function SingleCategory() {
   return (
     <div className="w-8/12 mx-auto">
       <div className="bg-gray-300 py-24 text-5xl font-semibold text-center">
-        {categoryTitle}
+        {/* {categoryTitle} */}
+        Category Name here
       </div>
 
       {/* List of products */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
-        {products.map((index) => (
-          <SingleProductCard key={index} />
+        {products.map((eachItem ,index) => (
+          <SingleProductCard eachItem={eachItem} key={index} />
         ))}
       </div>
     </div>
