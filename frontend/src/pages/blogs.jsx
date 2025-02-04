@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Blogs() {
   return (
-    <div>This is blogs page</div>
+    <div className='w-8/12 mx-auto'>This is blogs page</div>
   )
 }

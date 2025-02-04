@@ -34,7 +34,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/stores" element={<Stores />} />
       <Route path="/blogs" element={<Blogs />} />
       <Route path="/mega-menu" element={<MegaMenu />} />
-      <Route path="/shop/:id" element={<ProductDescription />} />
+      <Route path="/product-description" element={<ProductDescription />} />
      
     </Routes>
 
