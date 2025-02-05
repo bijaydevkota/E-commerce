@@ -73,13 +73,15 @@ export default function ProductDescription() {
       <hr />
 
       <ChildComponent name={name} />
+      <ChildComponent name={"Compant"} />
+      <ChildComponent name="Blogs" />
 
       </div>
 
 
     
 
-
+    
 
 
 
