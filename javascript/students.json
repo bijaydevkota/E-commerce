@@ -1,0 +1,14 @@
+{
+  "students": [
+    {
+      "name": "bijay",
+      "age": 22,
+      "city": "kathmandu"
+    },
+    {
+        "name": "loki",
+        "age": 22,
+        "city": "kathmandu"
+      }
+  ]
+}
