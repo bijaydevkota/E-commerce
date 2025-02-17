@@ -1,0 +1,26 @@
+//In early days js was used in frontend only as scripting language for the browser.
+//In this period the javascript was not supported in the server, so python ,php, java etc were used as backend.
+
+//Later on concept of node.js was introduced as a runtime for javascript on the server.
+//Now the runtime (nodejs) is responsible for executing the javascript code on the server side.
+
+//Node js is the runtime prototype which is complex and has a lot of features.
+//Then Express js was introduced as the framework instead of core nodejs.
+
+//API(Backend/Server)
+//Application Programming Interface
+//It serves as a bridge between frontend and database.
+
+
+//Steps to create a backend server using expressjs:
+//1. create a backend folder and go inside it 
+//2. npm init -y
+//3. npm i express
+//4. npm i mongoose
+//5. add  "type": "module", in package.json
+//6. npm i nodemon --> keeps the server running (nodemon server.js)
+
+//MongoDB
+//MongoDB is NoSQL database
+//It stores data in the form of documents and collection(JSON).
+//Backend cannot talk to database directly, It should use mongoose to talk to the database.
