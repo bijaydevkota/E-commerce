@@ -17,10 +17,13 @@
 //2. npm init -y
 //3. npm i express
 //4. npm i mongoose
-//5. add  "type": "module", in package.json
-//6. npm i nodemon --> keeps the server running (nodemon server.js)
+//5. add "type": "module", in package.json
+//6. npm i -g nodemon --> keeps the server running (nodemon server.js)
 
 //MongoDB
 //MongoDB is NoSQL database
 //It stores data in the form of documents and collection(JSON).
 //Backend cannot talk to database directly, It should use mongoose to talk to the database.
+
+
+//Database username: dbijay2058 password:MuJ3sHvEZ8ITroNg
