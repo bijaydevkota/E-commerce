@@ -11,7 +11,7 @@ try {
   mongoose.connect(
     "mongodb+srv://dbijay2058:bijay123@cluster0.zdt3l.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   );
-  console.log("MongoDB connection success");
+  console.log("MongoDB connected successfully");
 } catch (error) {
   console.log("MongoDB connection error", error);
 }
@@ -28,6 +28,113 @@ const productSchema = new mongoose.Schema({
 
 //Make product table
 const Product = mongoose.model("Product", productSchema);
+
+//Category Schema
+const categorySchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  imageUrl: { type: String, required: true },
+});
+
+//Category Table
+const Category = mongoose.model("category", categorySchema);
+
+//Category CRUD
+//create a product
+app.post("/categories", async (req, res) => {
+  try {
+    //Check if category name already taken or not
+    const categoryExist = await Category.findOne({ name: req.body.name });
+    if (categoryExist) {
+      return res.status(409).json({
+        messege: "Name already taken",
+      });
+    }
+    const newCategory = await new Category(req.body).save();
+    return res.status(201).json({
+      messege: "Category Created Successfully",
+      data: newCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      messege: "Internal Server Error",
+    });
+  }
+});
+
+//get all categories
+app.get("/categories", async (req, res) => {
+  try {
+    const allCategories = await Category.find();
+    return res.status(200).json({
+      messege: "All Categories fetched successfully",
+      data: allCategories,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      messege: "Internal server error",
+      error,
+    });
+  }
+});
+
+//get Single category
+app.get("/categories/:id", async (req, res) => {
+  try {
+    const singleCategory = await Category.findById(req.params.id);
+    if (!singleCategory) {
+      return res.status(404).json({
+        messege: "Category Not Found",
+      });
+    }
+    return res.status(201).json({
+      messege: "single category fetched successfully",
+      data: singleCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      messege: "Internal server error",
+      error,
+    });
+  }
+});
+
+//update category
+app.patch("/categories/:id", async (req, res) => {
+  try {
+    const updatedCategory = await Category.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    return res.status(200).json({
+      messege: "Category updated successfully",
+      data: updatedCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      messege: "Internal server error",
+      error,
+    });
+  }
+});
+
+//dete category
+app.delete("/categories/:id", async (req, res) => {
+  try {
+    const deletedCategory = await Category.findByIdAndDelete(req.params.id)
+    if(!deletedCategory){
+      return res.status(404).json({
+        messege:"Category Not Found"
+      })
+    }
+    return res.status(200).json({
+      messege: "Categegory deleted successfully",
+      data: deletedCategory
+    })
+  } catch (error) {
+    return res.status(500).json({
+      messege: "Internal server error"
+    })
+  }
+});
 
 //CRUD for product
 //1.Create a product
@@ -85,7 +192,23 @@ app.get("/products/:id", async (req, res) => {
 });
 
 //Update a product
-app.patch("/products/:id", async (req, res) => {});
+app.patch("/products/:id", async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    return res.status(200).json({
+      messege: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      messege: "Internal Server Error",
+    });
+  }
+});
 
 //Delete a product
 app.delete("/products/:id", async (req, res) => {
