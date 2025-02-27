@@ -1,5 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
+import { Product } from "./schema/productSchema.js";
+import { Category } from "./schema/categorySchema.js";
+import multer from "multer";
+const upload = multer({ dest: 'uploads/'})
 
 //Configure the server
 const app = express();
@@ -16,32 +20,20 @@ try {
   console.log("MongoDB connection error", error);
 }
 
-//Product Schema (items for the product table)
-const productSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  description: { type: String },
-  price: { type: Number, required: true },
-  previousPrice: { type: Number, required: true },
-  imageUrl: { type: String, required: true },
-  category: { type: String, required: true },
-});
 
-//Make product table
-const Product = mongoose.model("Product", productSchema);
-
-//Category Schema
-const categorySchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  imageUrl: { type: String, required: true },
-});
-
-//Category Table
-const Category = mongoose.model("category", categorySchema);
+//CATEGORY
 
 //Category CRUD
 //create a product
-app.post("/categories", async (req, res) => {
+app.post("/categories", upload.single('imageUrl'), async (req, res) => {
   try {
+      //Handle the image upload before esaving to database.
+    console.log(req.file)
+
+
+
+
+
     //Check if category name already taken or not
     const categoryExist = await Category.findOne({ name: req.body.name });
     if (categoryExist) {
@@ -116,7 +108,7 @@ app.patch("/categories/:id", async (req, res) => {
   }
 });
 
-//dete category
+//delete category
 app.delete("/categories/:id", async (req, res) => {
   try {
     const deletedCategory = await Category.findByIdAndDelete(req.params.id)
