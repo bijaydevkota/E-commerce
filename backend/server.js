@@ -3,7 +3,15 @@ import mongoose from "mongoose";
 import { Product } from "./schema/productSchema.js";
 import { Category } from "./schema/categorySchema.js";
 import multer from "multer";
-const upload = multer({ dest: 'uploads/'})
+const upload = multer({ dest: "uploads/" });
+import { v2 as cloudinary } from "cloudinary";
+import 'dotenv/config'
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret:process.env.API_SECRET,
+});
 
 //Configure the server
 const app = express();
@@ -20,20 +28,12 @@ try {
   console.log("MongoDB connection error", error);
 }
 
-
 //CATEGORY
 
 //Category CRUD
 //create a product
-app.post("/categories", upload.single('imageUrl'), async (req, res) => {
+app.post("/categories", upload.single("imageUrl"), async (req, res) => {
   try {
-      //Handle the image upload before esaving to database.
-    console.log(req.file)
-
-
-
-
-
     //Check if category name already taken or not
     const categoryExist = await Category.findOne({ name: req.body.name });
     if (categoryExist) {
@@ -41,7 +41,15 @@ app.post("/categories", upload.single('imageUrl'), async (req, res) => {
         messege: "Name already taken",
       });
     }
-    const newCategory = await new Category(req.body).save();
+
+    //Handle the image upload before esaving to database.
+    const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path);
+    console.log(cloudinaryResponse, "hello its cloudinary response");
+
+    const newCategory = await new Category({
+      ...req.body,
+      imageUrl: cloudinaryResponse.secure_url,
+    }).save();
     return res.status(201).json({
       messege: "Category Created Successfully",
       data: newCategory,
@@ -93,9 +101,13 @@ app.get("/categories/:id", async (req, res) => {
 //update category
 app.patch("/categories/:id", async (req, res) => {
   try {
-    const updatedCategory = await Category.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
     return res.status(200).json({
       messege: "Category updated successfully",
       data: updatedCategory,
@@ -111,20 +123,20 @@ app.patch("/categories/:id", async (req, res) => {
 //delete category
 app.delete("/categories/:id", async (req, res) => {
   try {
-    const deletedCategory = await Category.findByIdAndDelete(req.params.id)
-    if(!deletedCategory){
+    const deletedCategory = await Category.findByIdAndDelete(req.params.id);
+    if (!deletedCategory) {
       return res.status(404).json({
-        messege:"Category Not Found"
-      })
+        messege: "Category Not Found",
+      });
     }
     return res.status(200).json({
       messege: "Categegory deleted successfully",
-      data: deletedCategory
-    })
+      data: deletedCategory,
+    });
   } catch (error) {
     return res.status(500).json({
-      messege: "Internal server error"
-    })
+      messege: "Internal server error",
+    });
   }
 });
 
