@@ -1,10 +1,12 @@
-//CRUD for product
-
+import cloudinary from "../lib/cloudinaryConfig.js";
 import { Product } from "../schema/productSchema.js";
 
+//CRUD for product
 //1.Create a product
 export const createProduct = async (req, res) => {
   try {
+    console.log(req.file);
+
     //check if product name already taken or not
     const productExist = await Product.findOne({ name: req.body.name });
     if (productExist) {
@@ -13,7 +15,14 @@ export const createProduct = async (req, res) => {
       });
     }
 
-    const newProduct = await new Product(req.body).save();
+    //Upload the image in cloudinary and get the url
+    const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path);
+    console.log(cloudinaryResponse, "hello its cloudinary response");
+
+    const newProduct = await new Product({
+      ...req.body,
+      imageUrl: cloudinaryResponse.secure_url,
+    }).save();
     return res.status(201).json({
       messege: "Product created successfully",
       data: newProduct,
@@ -57,21 +66,37 @@ export const getProductById = async (req, res) => {
 };
 
 //Update a product
+// 3) Update a particular product
 export const updateProductById = async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    return res.status(200).json({
-      messege: "Product updated successfully",
-      data: updatedProduct,
-    });
+      
+      
+      // image (i.e., update gardaa image pathayo vaney) vako case maa  yesaree handle garney
+      if (req.file) {
+          const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path);
+          const updatedProduct = await Product.findByIdAndUpdate(req.params.id, { ...req.body, imageUrl: cloudinaryResponse.secure_url }, { new: true });
+
+          if (!updatedProduct) {
+              return res.status(404).json({ message: "Product not found" }); // if category not found while doing update operations
+          }
+          return res.status(200).json({
+              message: "Product Updated Successfully",
+              data: updatedProduct
+          })
+      }
+
+      // if image is not uploaded then dont handle the image upload part
+      const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      if (!updatedProduct) {
+          return res.status(404).json({ message: "Product not found" })
+      }
+      return res.status(200).json({
+          message: "Product Updated Successfully",
+          data: updatedProduct
+      })
+
   } catch (error) {
-    return res.status(500).json({
-      messege: "Internal Server Error",
-    });
+      return res.status(500).json({ message: "Internal server error" });
   }
 };
 

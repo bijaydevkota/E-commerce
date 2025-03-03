@@ -13,7 +13,7 @@ const upload = multer({ dest: "uploads/" });
 router.post("/", upload.single("imageUrl"), createCategory);
 router.get("/", getAllCategory);
 router.get("/:id", getCategoryById);
-router.patch("/", updateCategoryById);
-router.delete("/", deleteCategoryById);
+router.patch("/:id", upload.single("imageUrl"), updateCategoryById);
+router.delete("/:id", deleteCategoryById);
 
 export default router;
