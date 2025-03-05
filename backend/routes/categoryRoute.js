@@ -8,12 +8,13 @@ import {
 } from "../controller/categoryController.js";
 const router = express.Router();
 import multer from "multer";
+import { verifyToken } from "../middleware/verifyToken.js";
 const upload = multer({ dest: "uploads/" });
 
-router.post("/", upload.single("imageUrl"), createCategory);
-router.get("/", getAllCategory);
+router.post("/",verifyToken, upload.single("imageUrl"), createCategory);
+router.get("/", verifyToken, getAllCategory);
 router.get("/:id", getCategoryById);
-router.patch("/:id", upload.single("imageUrl"), updateCategoryById);
-router.delete("/:id", deleteCategoryById);
+router.patch("/:id",verifyToken, updateCategoryById);
+router.delete("/:id",verifyToken, deleteCategoryById);
 
 export default router;

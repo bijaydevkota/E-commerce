@@ -7,13 +7,14 @@ import {
   updateProductById,
 } from "../controller/productController.js";
 import multer from "multer";
+import { verifyToken } from "../middleware/verifyToken.js";
 const upload = multer({ dest: "uploads/" });
 const router = express.Router();
 
-router.post("/", upload.single("imageUrl"), createProduct);
+router.post("/",verifyToken, upload.single("imageUrl"), createProduct);
 router.get("/", getAllProduct);
 router.get("/:id", getProductById);
-router.patch("/:id", upload.single("imageUrl"), updateProductById);
-router.delete("/:id", deleteProductById);
+router.patch("/:id",verifyToken, upload.single("imageUrl"), updateProductById);
+router.delete("/:id",verifyToken, deleteProductById);
 
 export default router;

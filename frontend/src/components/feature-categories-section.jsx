@@ -45,8 +45,21 @@ const categories=[
 ]
 
 export default function FeatureCategoriesSection() {
+//Usestate hooks
+const[name, setName] = useState("Bijay Devkota")
+console.log(name)
+
+const handleChangeName =()=>{
+  setName("Bijay Devkota changed")
+}
+
   return (
     <div className="w-8/12 mx-auto space-y-8 mt-8">
+      {name}
+      <button className="bg-green-500"
+      onClick={handleChangeName}
+      >change name
+      </button>
       <p className="text-2xl font-semibold">Featured Categories</p>
       <div>
         <Swiper
